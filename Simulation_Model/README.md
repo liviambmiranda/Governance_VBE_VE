@@ -51,7 +51,7 @@ Install the required package via:
 
 1.  **Network Setup**:
     
-    -   A network of members is initialized, where each member:
+    -   A network of members is initialised, where each member:
         -   Votes probabilistically (e.g., 80% chance of voting).
         -   Earns tokens as a reward for participation.
         -   Has unique tracking for token counts and voting behaviour.
@@ -78,7 +78,7 @@ Install the required package via:
 
 1.  **Clone or Download** this repository.
 2.  **Set Simulation Parameters**:
-    -   Adjust `quoruns` to test different quorum thresholds (e.g., `[0.5, 0.7, 0.8, 0.9]`).
+    -   Adjust `quorums` to test different quorum thresholds (e.g., `[0.5, 0.7, 0.8, 0.9]`).
     -   Set token rewards in `tokens_added_values` (e.g., `[1, 2, 3]`).
     -   Modify voting probabilities in the `gerar_voto` method if needed.
 3.  **Run the Scripts**:
