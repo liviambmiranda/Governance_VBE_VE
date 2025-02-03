@@ -1,0 +1,32 @@
+from textblob import TextBlob
+from textblob.en.sentiments import PatternAnalyzer
+
+def analise_sentimento(texto):
+    # Criando um objeto TextBlob com o analisador de padrões (PatternAnalyzer)
+    blob = TextBlob(texto, analyzer=PatternAnalyzer())
+
+    # Obtendo a polaridade do sentimento
+    polaridade = blob.sentiment.polarity
+
+    # Definindo o sentimento com base na polaridade
+    if polaridade > 0:
+        sentimento = "positivo"
+    elif polaridade < 0:
+        sentimento = "negativo"
+    else:
+        sentimento = "neutro"
+
+    return sentimento, polaridade
+
+# Exemplo de conjunto de textos
+textos = [
+  
+]
+
+# Aplicando a análise de sentimento para cada texto
+for texto in textos:
+    sentimento, polaridade = analise_sentimento(texto)
+    print(f"Texto: {texto}")
+    print(f"Sentimento: {sentimento}")
+    print(f"Polaridade: {polaridade}")
+    print("-" * 50)

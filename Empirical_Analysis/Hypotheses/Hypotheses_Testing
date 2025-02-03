@@ -1,0 +1,132 @@
+import numpy as np
+from scipy import stats
+from scipy.stats import rankdata
+
+# Cliff's Delta calculation functions remain the same
+def cliffs_delta(x, y):
+    nx, ny = len(x), len(y)
+    dominance = 0
+    for i in x:
+        for j in y:
+            if i > j:
+                dominance += 1
+            elif i < j:
+                dominance -= 1
+    return dominance / (nx * ny)
+
+def create_dominance_matrix(x, y):
+    nx, ny = len(x), len(y)
+    dom_matrix = np.zeros((nx, ny))
+    for i, xi in enumerate(x):
+        for j, yj in enumerate(y):
+            if xi > yj:
+                dom_matrix[i, j] = 1
+            elif xi < yj:
+                dom_matrix[i, j] = -1
+    return dom_matrix
+
+def calculate_variance_components(dom_matrix):
+    n1, n2 = dom_matrix.shape
+    d = np.mean(dom_matrix)
+
+    s_di2 = np.sum((np.mean(dom_matrix, axis=1) - d)**2) / (n1 - 1)
+    s_dj2 = np.sum((np.mean(dom_matrix, axis=0) - d)**2) / (n2 - 1)
+    s_dij2 = np.sum((dom_matrix - d)**2) / ((n1 - 1) * (n2 - 1))
+
+    return s_di2, s_dj2, s_dij2
+
+def cliffs_delta_ci(x, y, alpha=0.05):
+    n1, n2 = len(x), len(y)
+    d = cliffs_delta(x, y)
+
+    dom_matrix = create_dominance_matrix(x, y)
+    s_di2, s_dj2, s_dij2 = calculate_variance_components(dom_matrix)
+
+    s_d2 = (n2**2 * s_di2 + n1**2 * s_dj2 - s_dij2) / (n1 * n2 * (n1 - 1) * (n2 - 1))
+    s_d = np.sqrt(s_d2)
+
+    df = n1 + n2 - 2
+    t = stats.t.ppf(1 - alpha/2, df)
+
+    ci_lower = (d - d**3 - t * s_d * np.sqrt((1 - d**2)**2 + t**2 * s_d2)) / (1 - d**2 + t**2 * s_d2)
+    ci_upper = (d - d**3 + t * s_d * np.sqrt((1 - d**2)**2 + t**2 * s_d2)) / (1 - d**2 + t**2 * s_d2)
+
+    if d == 1 or d == -1:
+        n = min(n1, n2)
+        z = stats.norm.ppf(1 - alpha/2)
+        ci_lower = (n - z**2) / (n + z**2) if d == 1 else -1
+        ci_upper = (n - z**2) / (n + z**2) if d == -1 else 1
+
+    return d, ci_lower, ci_upper
+
+# Data
+data = np.array([
+    ...
+])
+
+constructs = [[0,1], [2,3,4], [5,6], [7,8], [9,10,11,12]]
+
+# Hypothesized median
+hypothesized_median = 4
+
+# Number of questions
+num_questions = data.shape[1]
+
+# Perform one-tailed Wilcoxon signed-rank test for each question
+results = []
+for i in range(num_questions):
+    # Extract data for the current question
+    question_data = data[:, i]
+
+    # Calculate mean, median, and standard deviation
+    mean = np.mean(question_data)
+    median = np.median(question_data)
+    std_dev = np.std(question_data, ddof=1)
+
+    # Step 1: Calculate differences for Wilcoxon test
+    diffs = question_data - hypothesized_median
+
+    # Step 2: Remove zero differences for Wilcoxon test only
+    non_zero_diffs = diffs[diffs != 0]
+    non_zero_data = question_data[diffs != 0]  # Also remove corresponding data points
+
+    # Step 3: Rank absolute differences of non-zero differences
+    if len(non_zero_data) > 0:  # Ensure there are non-zero differences left
+        ranks = rankdata(np.abs(non_zero_diffs))
+        signed_ranks = np.where(non_zero_diffs > 0, ranks, -ranks)
+
+        # Step 4: Sum positive and negative ranks
+        W_plus = np.sum(signed_ranks[signed_ranks > 0])  # Sum of positive ranks
+        W_minus = -np.sum(signed_ranks[signed_ranks < 0])  # Sum of negative ranks (make positive)
+
+        # Step 5: Test statistic is the smaller of W+ and W-
+        W = min(abs(W_plus), abs(W_minus))
+
+        # Step 6: Perform the Wilcoxon signed-rank test to calculate the p-value
+        statistic, p_value = stats.wilcoxon(non_zero_data - hypothesized_median, alternative='greater', mode='exact')
+
+        # Step 7: Calculate Cliff's Delta and its CI using the full dataset (including zero differences)
+        effect_size, ci_lower, ci_upper = cliffs_delta_ci(question_data, [hypothesized_median] * len(question_data))
+
+        results.append((i+1, mean, median, std_dev, W, p_value, effect_size, ci_lower, ci_upper))
+
+# Print results
+print(non_zero_diffs)
+print(ranks)
+print(signed_ranks)
+print("One-Tailed Wilcoxon Signed-Rank Test Results (Testing if greater than 4)")
+print("Sample size: 12")
+print("Hypothesized median: 4")
+print("\n{:<10} {:<10} {:<10} {:<10} {:<10} {:<25} {:<20} {:<15} {:<20}".format(
+    "Question", "Mean", "Median", "Std Dev", "Ws", "Exact p-value (one-tailed)", "Significant at α=0.05", "Cliff's Delta", "95% CI"))
+print("-" * 140)
+for question, mean, median, std_dev, W, p_value, effect_size, ci_lower, ci_upper in results:
+
+    significant = "Yes" if p_value < 0.05 else "No"
+    print("{:<10} {:<10.2f} {:<10.2f} {:<10.2f} {:<10} {:<25.8f} {:<20} {:<15.4f} ({:.4f}, {:.4f})".format(
+        question, mean, median, std_dev, W, p_value, significant, effect_size, ci_lower, ci_upper))
+
+# Additional summary
+print("\nSummary:")
+print(f"Questions with sample median > hypothesized median (4): "
+      f"{sum(median > 4 for _, _, median, _, _, _, _, _, _ in results)}")

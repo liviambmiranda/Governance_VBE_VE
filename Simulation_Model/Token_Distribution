@@ -1,0 +1,88 @@
+import matplotlib.pyplot as plt
+import random
+
+class Membro:
+    def __init__(self, id):
+        self.id = id
+        self.votou = self.gerar_voto()
+        self.tokens = 0
+
+    def gerar_voto(self):
+        return random.choices([1, 0], weights=[0.8, 0.2], k=1)[0]
+
+    def resetar_voto(self):
+        self.votou = self.gerar_voto()
+
+    def atualizar_tokens(self, tokens_added):
+        if self.votou:
+            self.tokens += tokens_added
+
+    def __str__(self):
+        return f"Membro {self.id} - Tokens: {self.tokens}"
+
+class Rede:
+    def __init__(self, quantidade_membros=50):
+        self.membros = [Membro(id=i) for i in range(quantidade_membros)]
+        self.amplitudes = []
+
+    def realizar_votacoes(self, quantidade=1000, quorum=0.5, tokens_added=1):
+        for _ in range(quantidade):
+            total_tokens = sum(membro.tokens for membro in self.membros)
+            self.amplitudes.append(total_tokens)
+
+            for membro in self.membros:
+                membro.resetar_voto()
+
+            votantes = sum(1 for membro in self.membros if membro.votou == 1)
+
+            if votantes >= len(self.membros) * quorum:
+                for membro in self.membros:
+                    membro.atualizar_tokens(tokens_added)
+
+    def exibir_membros(self):
+        for membro in self.membros:
+            print(membro)
+
+# Rodar as votações para cada quórum e armazenar as amplitudes
+quoruns = [0.5, 0.7, 0.8, 0.9]
+resultados = {}
+tokens_added_values = [1, 2, 3]
+
+# Create a dictionary to map quorums to colors
+quorum_colors = {0.5: 'b', 0.7: 'r', 0.8: 'g', 0.9: 'm'}
+
+# Create a dictionary to map tokens_added to colors
+tokens_added_colors = {1: 'g', 2: 'b', 3: 'r'}
+
+# Iterate over each quorum
+for q in quoruns:
+    plt.figure(figsize=(9, 6))
+    plt.rcParams['axes.titlesize'] = 20
+    plt.rcParams['axes.labelsize'] = 18
+    plt.rcParams['xtick.labelsize'] = 17
+    plt.rcParams['ytick.labelsize'] = 17
+    plt.rcParams['legend.fontsize'] = 17
+
+    # Iterate over each tokens_added for the current quorum
+    for tokens_added in tokens_added_values:
+        rede = Rede()
+        rede.realizar_votacoes(quorum=q, tokens_added=tokens_added)
+        resultados[(q, tokens_added)] = rede.amplitudes
+
+        quorum_color = quorum_colors[q]
+        tokens_added_color = tokens_added_colors[tokens_added]
+
+        plt.plot(rede.amplitudes, label=f"Token reward = {tokens_added}", color=tokens_added_color, linewidth=2.2)
+
+    plt.xlabel("Voting Rounds")
+    plt.ylabel("Total Tokens Distribution")
+    plt.axhline(0, color='black', linewidth=1)  # Add a horizontal line at y=0
+    plt.ylim(bottom=0)  # Ensure the y-axis starts from 0
+    plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))  # Set y-axis in scientific notation
+    #plt.title(f"Total Tokens in the System for Quorum {q*100}%")
+    plt.legend()
+    plt.grid(True)
+
+    # Save each graph separately
+    plt.savefig(f'total_tokens_quorum_{q*100}.pdf')
+    plt.show()

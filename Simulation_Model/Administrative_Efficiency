@@ -1,0 +1,64 @@
+import matplotlib.pyplot as plt
+import random
+
+class Membro:
+    def __init__(self, id):
+        self.id = id
+        self.votou = self.gerar_voto()
+
+    def gerar_voto(self):
+        return random.choices([1, 0], weights=[0.8, 0.2], k=1)[0]
+
+    def resetar_voto(self):
+        self.votou = self.gerar_voto()
+
+    def __str__(self):
+        return f"Membro {self.id}"
+
+class Rede:
+    def __init__(self, quantidade_membros=50):
+        self.membros = [Membro(id=i) for i in range(quantidade_membros)]
+        self.quorum_atingido = []
+
+    def realizar_votacoes(self, quantidade=1000, quorum=0.5):
+        quorum_count = 0
+
+        for _ in range(quantidade):
+            for membro in self.membros:
+                membro.resetar_voto()
+
+            votantes = sum([1 for membro in self.membros if membro.votou == 1])
+
+            if votantes >= len(self.membros) * quorum:
+                quorum_count += 1
+
+        self.quorum_atingido.append(quorum_count)
+
+# Quorum values
+quoruns = [0.5, 0.51, 0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59, 0.6, 0.61, 0.62, 0.63, 0.64, 0.65, 0.66, 0.67, 0.68, 0.69, 0.7, 0.71, 0.72, 0.73, 0.74, 0.75, 0.76, 0.77, 0.78, 0.79, 0.8, 0.81, 0.82, 0.83, 0.84, 0.85, 0.86, 0.87, 0.88, 0.89, 0.9]
+
+# Create a list to store the results
+resultados = []
+
+# Iterate over each quorum
+for q in quoruns:
+    rede = Rede()
+    rede.realizar_votacoes(quorum=q)
+    resultados.append(rede.quorum_atingido[0])  # Apenas o valor após 10000 iterações
+
+# Plot the results as a scatter plot
+plt.figure(figsize=(10, 6))
+plt.rcParams['axes.titlesize'] = 20
+plt.rcParams['axes.labelsize'] = 18
+plt.rcParams['xtick.labelsize'] = 17
+plt.rcParams['ytick.labelsize'] = 17
+plt.rcParams['legend.fontsize'] = 17
+
+plt.scatter([q * 100 for q in quoruns], resultados, marker='o', color='g')
+
+plt.xlabel("Quorum Percentage (%)")
+plt.ylabel("Voting Rounds Achieving Quorum")
+plt.grid(True)
+
+plt.savefig('quorum_atingido_10000_iteracoes_scatter.pdf')
+plt.show()

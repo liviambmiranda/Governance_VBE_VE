@@ -1,0 +1,14 @@
+import numpy as np
+from scipy.stats import shapiro
+
+# Data array
+data = np.array([
+   ...
+])
+
+# Perform Shapiro-Wilk test for each column
+shapiro_results = [shapiro(data[:, i]) for i in range(data.shape[1])]
+
+# Format the results
+shapiro_results_formatted = [(i+1, result.statistic, result.pvalue) for i, result in enumerate(shapiro_results)]
+shapiro_results_formatted

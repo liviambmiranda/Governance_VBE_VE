@@ -1,0 +1,46 @@
+import numpy as np
+import pandas as pd
+from scipy.stats import kendalltau
+
+def average_inter_item_correlation_kendall(data, constructs):
+    n_constructs = len(constructs)
+    avg_correlations = []
+
+    for construct in constructs:
+        n_items = len(construct)
+        construct_data = data[:, construct]
+
+        if n_items > 1:  # We need at least 2 items to calculate correlations
+            correlations = []
+            for i in range(n_items):
+                for j in range(i+1, n_items):
+                    corr, _ = kendalltau(construct_data[:, i], construct_data[:, j])
+                    correlations.append(corr)
+
+            avg_correlations.append(np.mean(correlations))
+        else:
+            avg_correlations.append(np.nan)  # Can't calculate correlation for single-item constructs
+
+    return avg_correlations
+
+# Your data and constructs
+data = np.array([
+    ...
+])
+
+constructs = [[0,1], [2,3,4], [5,6], [7,8], [9,10,11,12]]
+
+# Calculate average inter-item correlations
+avg_correlations = average_inter_item_correlation_kendall(data, constructs)
+
+# Create a DataFrame for better visualization
+construct_names = [f'Construct {i+1}' for i in range(len(constructs))]
+df_avg_correlations = pd.DataFrame({'Construct': construct_names, 'Avg Inter-Item Correlation': avg_correlations})
+
+# Display the results
+print("Average Inter-Item Correlations (Kendall's tau):")
+print(df_avg_correlations.round(3))
+
+# Calculate overall average
+overall_avg = np.nanmean(avg_correlations)
+print(f"\nOverall Average Inter-Item Correlation: {overall_avg:.3f}")

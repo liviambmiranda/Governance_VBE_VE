@@ -1,0 +1,35 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import spearmanr
+from sklearn.utils import resample
+
+# Your data and constructs
+data = np.array([
+    ...
+])
+
+constructs = [[0,1], [2,3,4], [5,6], [7,8], [9,10,11,12]]
+
+df = pd.DataFrame(data, columns=[f'Q{i+1}' for i in range(13)])
+
+
+# Reliability coefficient - Cronbach's Alpha
+def cronbach_alpha(itemscores):
+    itemscores = np.asarray(itemscores)
+    itemvars = itemscores.var(axis=0, ddof=1)
+    tscores = itemscores.sum(axis=1)
+    nitems = itemscores.shape[1]
+    return (nitems / (nitems-1)) * (1 - (itemvars.sum() / tscores.var(ddof=1)))
+
+
+# Calculate Cronbach's alpha and average inter-item correlation for each construct
+for i, construct in enumerate(constructs):
+    construct_data = data[:, construct]
+    alpha = cronbach_alpha(construct_data)
+    print(f"Construct {i+1}:")
+    print(f"  Cronbach's alpha: {alpha:.3f}")
+  
+
+
