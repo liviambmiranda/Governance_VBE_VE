@@ -1,6 +1,6 @@
 # Overview
 
-This repository explores the **validation, testing, and simulation analysis of blockchain governance mechanisms** for inter-organizational collaboration in **Virtual Enterprises** and **Virtual Breeding Environments (VBEs)**. The projects are divided into two major components:
+This repository explores the **validation, testing, and simulation analysis of blockchain governance mechanisms** for inter-organisational collaboration in **Virtual Enterprises** and **Virtual Breeding Environments (VBEs)**. The projects are divided into two major components:
 
 1. **Empirical Validation and Testing**  
 2. **Simulation Analysis**
@@ -9,7 +9,7 @@ This repository explores the **validation, testing, and simulation analysis of b
 
 ## (1) Empirical Validation and Testing of Blockchain Governance Mechanisms
 
-This project focuses on an **analytical model based on statistical methods** to evaluate the reliability of constructs, perform hypothesis testing, and analyze common method bias in a survey instrument used to validate and test the blockchain governance mechanisms based on responses from academics and practitioners.
+This project focuses on an **analytical model based on statistical methods** to evaluate the reliability of constructs, perform hypothesis testing, and analyse common method bias in a survey instrument used to validate and test the blockchain governance mechanisms based on responses from academics and practitioners.
 
 ### Key Features:
 
@@ -23,7 +23,7 @@ This project focuses on an **analytical model based on statistical methods** to 
   - [Access the code here.](Empirical_Analysis/Hypotheses)
 
 - **Common Method Bias**:
-  - Analyzes definitions used in the questionnaire to identify potential bias.
+  - Analyses definitions used in the questionnaire to identify potential bias.
   - Employs sentiment analysis techniques.
   - [Access the code here.](Empirical_Analysis/Sentiment_Analysis)
 
