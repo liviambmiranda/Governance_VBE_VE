@@ -1,5 +1,5 @@
 # Overview
-This repository contains a Python code designed to analyze **operational validity** through a **parameter variability-sensitivity analysis**. The analysis focuses on varying the participation probability of firms within a simulation-based voting model, examining its effects, e.g. on **power imbalance** across multiple voting rounds under different quorum and reward structures.
+This repository contains a Python code designed to analyse **operational validity** through a **parameter variability-sensitivity analysis**. The analysis focuses on varying the participation probability of firms within a simulation-based voting model, examining its effects, e.g. on **power imbalance** across multiple voting rounds under different quorum and reward structures.
 
 ---
 
