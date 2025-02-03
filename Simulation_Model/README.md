@@ -1,5 +1,5 @@
 # Overview
-This repository contains Python codes that simulate voting processes (shared decision-making) in a network of members (or firms). The simulation introduces concepts like quorum requirements and token-based incentives (representing voting power) for firms' participation. The simulation outputs analyse power imbalance, quorum attainment (administrative efficiency in shared decision-making), and total token allocation across multiple voting rounds.
+This repository contains Python codes that simulate voting processes (shared decision-making) in a network of members (or firms). The simulation introduces concepts like quorum requirements and token-based incentives (representing voting power) for firms' participation. The simulation outputs analyse power imbalance and quorum attainment (administrative efficiency in shared decision-making) across multiple voting rounds.
 
 ---
 
@@ -28,7 +28,7 @@ Install the required package via:
 1.  **Voting Simulations**:
     
     -   Members probabilistically vote across multiple rounds.
-    -   Different quorum thresholds (e.g., 50%, 70%, 80%, 90%) are analyzed.
+    -   Different quorum thresholds (e.g., 50%, 70%, 80%, 90%) are analysed.
 2.  **Token Reward Mechanism**:
     
     -   Tokens are awarded to members based on participation in voting rounds.
@@ -40,11 +40,8 @@ Install the required package via:
 4.  **Administrative Efficiency Analysis**:
     
     -   Tracks the frequency of quorum attainment across voting rounds and varying quorum thresholds.
-    -
-5.  **Total Token Distribution**:
     
-    -   Analyzes the cumulative distribution of tokens in the system across voting rounds.
-6.  **Visualization**:
+5.  **Visualization**:
     
     -   Generates graphs for power imbalance, administrative efficiency, and total token distribution.
 
@@ -57,17 +54,17 @@ Install the required package via:
     -   A network of members is initialized, where each member:
         -   Votes probabilistically (e.g., 80% chance of voting).
         -   Earns tokens as a reward for participation.
-        -   Has unique tracking for token counts and voting behavior.
+        -   Has unique tracking for token counts and voting behaviour.
 2.  **Voting Rounds**:
     
     -   Multiple voting rounds are simulated.
     -   Members’ votes are reset for each round.
-    -   Quorum attainment is checked, and rewards are distributed if quorum is met.
+    -   Quorum attainment is checked, and rewards are distributed if the quorum is met.
 3.  **Metrics Tracked**:
     
     -   **Power Imbalance**: Difference between the most and least rewarded members.
-    -   **Administrative Efficiency**: Number of rounds where quorum was achieved.
-    -   **Total Tokens**: Cumulative token distribution over rounds.
+    -   **Administrative Efficiency**: Number of rounds in which quorum was achieved.
+    
 4.  **Visualization**:
     
     -   Graphs are generated for:
@@ -103,11 +100,7 @@ Install the required package via:
     -   **Graph**: Scatter plot of voting rounds achieving quorum at various thresholds.
     -   **X-axis**: Quorum Percentage (%).
     -   **Y-axis**: Number of Voting Rounds Achieving Quorum.
-3.  **Total Token Distribution**:
-    
-    -   **Graph**: Tracks the cumulative token distribution in the system across rounds.
-    -   **X-axis**: Voting Rounds.
-    -   **Y-axis**: Sum of Tokens.
+
 
 ----------
 
@@ -115,9 +108,9 @@ Install the required package via:
 
 -   **Customization**:
     -   Adjust `quantidade_membros` in the `Rede` class to simulate networks of different sizes.
-    -   Modify the voting probabilities in the `gerar_voto` method to reflect different participation behaviors.
+    -   Modify the voting probabilities in the `gerar_voto` method to reflect different participation behaviours.
 -   **Graph Outputs**:
     -   Graphs are saved as:
         -   `amplitude_quorum_<quorum>.pdf` for power imbalance.
         -   `quorum_atingido_10000_iteracoes_scatter.pdf` for quorum attainment.
-        -   `total_tokens_quorum_<quorum>.pdf` for total token distribution.
+    
