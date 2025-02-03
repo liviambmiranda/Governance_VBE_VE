@@ -10,6 +10,6 @@
   - [Access the code here.](./Hypotheses)
 
 - **Common Method Bias**:
-  - Analyzes definitions used in the questionnaire to identify potential bias.
+  - Analyses definitions used in the questionnaire to identify potential bias.
   - Employs sentiment analysis techniques.
   - [Access the code here.](./Sentiment_Analysis)
