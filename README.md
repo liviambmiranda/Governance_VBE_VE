@@ -45,9 +45,6 @@ This project provides an **analytical model based on simulation** to study the *
 - **Administrative Efficiency**:
   - Quantifies the number of voting iterations that meet the minimum quorum, representing the **system's rate of valid decisions** after iterations.
 
-- **Token Distribution**:
-  - Analyzes the cumulative token distribution after each voting iteration that meets the minimum quorum.
-
 ### Code:
 
 - The full simulation model and analysis scripts can be found in [Simulation_Model](Simulation_Model).
